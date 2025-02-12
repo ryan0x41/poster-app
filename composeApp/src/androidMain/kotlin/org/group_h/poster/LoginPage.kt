@@ -1,8 +1,5 @@
 package org.group_h.poster
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,8 +10,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 
@@ -25,7 +20,7 @@ fun LoginPage(navController: NavController) {
 
     MaterialTheme {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            Text("Login", style = MaterialTheme.typography.headlineMedium)
+            Text("Login", style = MaterialTheme.typography.h2)
 
             Spacer(modifier = Modifier.height(32.dp))
 
