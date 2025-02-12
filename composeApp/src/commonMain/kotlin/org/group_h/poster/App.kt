@@ -16,8 +16,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import poster.composeapp.generated.resources.Res
 import poster.composeapp.generated.resources.compose_multiplatform
 
+data class Post(val username: String, val content: String)
+
 @Composable
 @Preview
+
+
 fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
