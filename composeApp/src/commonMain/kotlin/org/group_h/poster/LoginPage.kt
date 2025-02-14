@@ -141,10 +141,7 @@ fun LoginCheckbox(){
 }
 
 
-@Composable
-fun HomeScreen() {
-    Text("Welcome to Home Screen!")
-}
+
 
 @Composable
 fun CreateAccountScreen() {
