@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,10 +24,10 @@ fun HomeView() {
         TopAppBar(
             title = { Text("Poster") },
             actions = {
-                IconButton(onClick = { /* Handle search */ }) {
+                IconButton(onClick = { /* handle search */ }) {
                     Icon(Icons.Filled.Search, contentDescription = "Search")
                 }
-                IconButton(onClick = { /* Handle messages */ }) {
+                IconButton(onClick = { /* handle messages */ }) {
                     Icon(Icons.Filled.Send, contentDescription = "Messages")
                 }
             }
@@ -36,9 +37,8 @@ fun HomeView() {
         Box(modifier = Modifier.weight(1f)) {
             when (selectedTab) {
                 "home" -> HomeScreen()
-                "search" -> SearchScreen()
+                "post" -> PostScreen()
                 "profile" -> ProfileScreen()
-                "messages" -> MessagesScreen()
                 "notifications" -> NotificationScreen()
             }
         }
@@ -61,9 +61,9 @@ fun BottomNavigationBar(selectedTab: String, onTabSelected: (String) -> Unit) {
         )
 
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
-            selected = selectedTab == "search",
-            onClick = { onTabSelected("search") }
+            icon = { Icon(Icons.Filled.Add, contentDescription = "Search") },
+            selected = selectedTab == "post",
+            onClick = { onTabSelected("post") }
         )
 
         BottomNavigationItem(
@@ -93,12 +93,22 @@ fun HomeScreen() {
 }
 
 @Composable
-fun SearchScreen() {
+fun PostScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text("Search Screen", style = MaterialTheme.typography.h4)
+        Text("Post Screen", style = MaterialTheme.typography.h4)
+    }
+}
+
+@Composable
+fun NotificationScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("Notification Screen", style = MaterialTheme.typography.h4)
     }
 }
 
@@ -112,25 +122,8 @@ fun ProfileScreen() {
     }
 }
 
-@Composable
-fun MessagesScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Messages Screen", style = MaterialTheme.typography.h4)
-    }
-}
 
-@Composable
-fun NotificationScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Notification Screen", style = MaterialTheme.typography.h4)
-    }
-}
+
 
 // Preview
 @Preview
