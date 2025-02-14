@@ -13,13 +13,28 @@ import poster.composeapp.generated.resources.Res
 import poster.composeapp.generated.resources.compose_multiplatform
 import org.group_h.poster.LoginPage as LoginPage
 
+//@Composable
+//fun App() {
+//
+//    MaterialTheme {
+//        // reference our login page, load this first
+//        LoginPage(navigate = {})
+//    }
+//}
+
 @Composable
 fun App() {
+    var currentScreen by remember { mutableStateOf("login") }
+
     MaterialTheme {
-        // reference our login page, load this first
-        LoginPage(navigate = {})
+        when (currentScreen) {
+            "login" -> LoginPage(navigate = { screen -> currentScreen = screen })
+            "home" -> HomeView()
+            "createAccount" -> Register()
+        }
     }
 }
+
 
 @Preview
 @Composable
