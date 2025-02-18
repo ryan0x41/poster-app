@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import org.group_h.poster.ui.components.BottomNavigationBar
+import org.group_h.poster.ui.components.TopBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -21,18 +22,9 @@ fun HomeView() {
     var selectedTab by remember { mutableStateOf("home") }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Top App Bar with Search and Message icons
-        TopAppBar(
-            title = { Text("Poster") },
-            actions = {
-                IconButton(onClick = { /* handle search */ }) {
-                    Icon(Icons.Filled.Search, contentDescription = "Search")
-                }
-                IconButton(onClick = { /* handle messages */ }) {
-                    Icon(Icons.Filled.Send, contentDescription = "Messages")
-                }
-            }
-        )
+
+        //top navigation
+        TopBar()
 
         // Content based on the selected tab
         Box(modifier = Modifier.weight(1f)) {
@@ -44,7 +36,8 @@ fun HomeView() {
             }
         }
 
-        // Instagram-style Bottom Navigation
+
+        // bottom navigation
         BottomNavigationBar(selectedTab) { tab -> selectedTab = tab }
     }
 }
