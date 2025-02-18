@@ -1,17 +1,11 @@
 package org.group_h.poster
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import org.jetbrains.compose.resources.painterResource
+import org.group_h.poster.Screens.HomeView
+import org.group_h.poster.Screens.RegisterView
+import org.group_h.poster.Screens.LoginPage
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import poster.composeapp.generated.resources.Res
-import poster.composeapp.generated.resources.compose_multiplatform
-import org.group_h.poster.LoginPage as LoginPage
 
 //@Composable
 //fun App() {
@@ -30,7 +24,7 @@ fun App() {
         when (currentScreen) {
             "login" -> LoginPage(navigate = { screen -> currentScreen = screen })
             "home" -> HomeView()
-            "createAccount" -> Register()
+            "createAccount" -> RegisterView(navigate = { screen -> currentScreen = screen })
         }
     }
 }

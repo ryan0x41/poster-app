@@ -1,4 +1,4 @@
-package org.group_h.poster
+package org.group_h.poster.Screens
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
