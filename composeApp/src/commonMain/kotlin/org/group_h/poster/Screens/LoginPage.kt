@@ -26,126 +26,132 @@ fun LoginPage(navigate: (String) -> Unit) {
     var password by remember { mutableStateOf("") }
 
     MaterialTheme {
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            // define text of h2, using text "Login"
-            Text("Sign into your account", style = MaterialTheme.typography.h4)
 
-            // a spacer between the first input and h2
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // some label username
-            Text("Your email",style = MaterialTheme.typography.h6)
-            // text field for username with a decorationBox to create a placeholder
-            BasicTextField(
-                value = username,
-                onValueChange = { username = it },
-                modifier = Modifier.fillMaxWidth().height(56.dp).border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp)).padding(horizontal = 12.dp),
-                textStyle = TextStyle(fontSize = 20.sp, color = Color.Black),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-                decorationBox = { innerTextField ->
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.CenterStart
-                    )  {
-                        if (username.isEmpty()) {
-                            Text(
-                                text = " exampleUsername123",
-                                color = Color.Gray
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
-            )
-            Text("")
-
-            // some label for password input
-            Text("Your Password",style = MaterialTheme.typography.h6)
-            // password field with placeholder
-            BasicTextField(
-                value = password,
-                onValueChange = { password = it },
-                modifier = Modifier.fillMaxWidth().height(56.dp).border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp)).padding(horizontal = 12.dp),
-                textStyle = TextStyle(fontSize = 20.sp, color = Color.Black),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                decorationBox = { innerTextField ->
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        if (password.isEmpty()) {
-                            Text(
-                                text = "●●●●●●●●●●●",
-                                color = Color.Gray
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
-            )
-
-            LoginCheckbox()
-
-            // spacer between password input and login button
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // login button which will navigate to home page
-            Button(
-                onClick = { navigate("home") },
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.85f),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Login")
-            }
+                //title
+                Text("poster", style = MaterialTheme.typography.h4, modifier = Modifier.align(Alignment.CenterHorizontally))
 
-            // login button which will navigate to createAccount page
-            Button(
-                onClick = { navigate("createAccount") },
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-            ) {
-                Text("Create Account")
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // username/email text field
+                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+                    Text("Username/Email", style = MaterialTheme.typography.h6)
+                    BasicTextField(
+                        value = username,
+                        onValueChange = { username = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(45.dp)
+                            .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+                            .padding(horizontal = 12.dp),
+                        textStyle = TextStyle(fontSize = 20.sp, color = Color.Black),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                        decorationBox = { innerTextField ->
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                if (username.isEmpty()) {
+                                    Text(text = " exampleUsername123", color = Color.Gray)
+                                }
+                                innerTextField()
+                            }
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // password field
+                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+                    Text("Password", style = MaterialTheme.typography.h6)
+                    BasicTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(45.dp)
+                            .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+                            .padding(horizontal = 12.dp),
+                        textStyle = TextStyle(fontSize = 20.sp, color = Color.Black),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        decorationBox = { innerTextField ->
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                if (password.isEmpty()) {
+                                    Text(text = "●●●●●●●●●●●", color = Color.Gray)
+                                }
+                                innerTextField()
+                            }
+                        }
+                    )
+                }
+
+
+                Spacer(modifier = Modifier.height(0.dp))
+                LoginCheckbox()
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // login button
+                Button(
+                    onClick = { navigate("home") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
+                    Text("Sign In", style = MaterialTheme.typography.h6)
+                }
+
+                // dont have account with clickable text that brings user to register page
+                Spacer(modifier = Modifier.height(0.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                    Text("Don't have an account yet? ")
+                    Text(
+                        text = "Sign Up",
+                        color = Color.Blue,
+                        modifier = Modifier.clickable { navigate("createAccount") }
+                    )
+                }
             }
         }
     }
-
 }
 
-//checkbox
+// login checkbox to remember account
 @Composable
 fun LoginCheckbox(){
     var checked by remember { mutableStateOf(true) }
-
-    Row( // Use Column to structure elements properly
-        verticalAlignment = Alignment.CenterVertically, // Aligns checkbox & text in the same row
-        horizontalArrangement = Arrangement.SpaceBetween, // Distributes elements properly
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("Remember me")
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
                 checked = checked,
                 onCheckedChange = { checked = it }
             )
+            Text("Remember me")
         }
-
         Text(
             "Forgot Password?",
             color = Color.Blue,
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.clickable{
-
-            }
+            modifier = Modifier.clickable { /* handle forgot password click */ }
         )
     }
-}
-
-
-
-
-@Composable
-fun CreateAccountScreen() {
-    Text("Create Account Screen")
 }
 
 @Preview

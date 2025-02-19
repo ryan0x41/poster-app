@@ -30,9 +30,10 @@ fun HomeView() {
         Box(modifier = Modifier.weight(1f)) {
             when (selectedTab) {
                 "home" -> HomeScreen()
+                "notifications" -> NotificationScreen()
                 "post" -> PostScreen()
                 "profile" -> ProfileScreen()
-                "notifications" -> NotificationScreen()
+
             }
         }
 

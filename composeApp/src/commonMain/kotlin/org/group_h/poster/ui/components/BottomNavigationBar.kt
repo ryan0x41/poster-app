@@ -20,15 +20,15 @@ fun BottomNavigationBar(selectedTab: String, onTabSelected: (String) -> Unit) {
         )
 
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.Add, contentDescription = "Post") },
-            selected = selectedTab == "post",
-            onClick = { onTabSelected("post") }
-        )
-
-        BottomNavigationItem(
             icon = { Icon(Icons.Filled.Notifications, contentDescription = "Notifications") },
             selected = selectedTab == "notifications",
             onClick = { onTabSelected("notifications") }
+        )
+
+        BottomNavigationItem(
+            icon = { Icon(Icons.Filled.Add, contentDescription = "Post") },
+            selected = selectedTab == "post",
+            onClick = { onTabSelected("post") }
         )
 
         BottomNavigationItem(
