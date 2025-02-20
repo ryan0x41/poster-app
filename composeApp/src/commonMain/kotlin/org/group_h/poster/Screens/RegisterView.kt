@@ -157,7 +157,7 @@ fun RegisterView(navigate: (String) -> Unit) {
         }
     }
 }
-g
+
 @Preview
 @Composable
 fun RegisterPagePreview() {
