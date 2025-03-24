@@ -40,7 +40,7 @@ fun RegisterView(navigate: (String) -> Unit) {
             ) {
                 // title
                 Text(
-                    "poster",
+                    "poster ryan",
                     style = MaterialTheme.typography.h4,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
