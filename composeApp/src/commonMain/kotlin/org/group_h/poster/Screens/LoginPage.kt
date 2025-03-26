@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -30,6 +32,7 @@ private val TextFieldBorder = Color(0xFF424242)
 fun LoginPage(navigate: (String) -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     MaterialTheme(
         colors = darkColors(
@@ -62,7 +65,7 @@ fun LoginPage(navigate: (String) -> Unit) {
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                //username/email text field
+                // Username/Email text field
                 Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
                     Text("Username/Email", style = MaterialTheme.typography.h6.copy(color = DarkText))
                     BasicTextField(
@@ -91,9 +94,26 @@ fun LoginPage(navigate: (String) -> Unit) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                //password field
+                // Password field with text-based visibility toggle
                 Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-                    Text("Password", style = MaterialTheme.typography.h6.copy(color = DarkText))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Password", style = MaterialTheme.typography.h6.copy(color = DarkText))
+                        TextButton(
+                            onClick = { passwordVisible = !passwordVisible },
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Text(
+                                text = if (passwordVisible) "HIDE" else "SHOW",
+                                color = AccentBlue,
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
+
                     BasicTextField(
                         value = password,
                         onValueChange = { password = it },
@@ -103,6 +123,8 @@ fun LoginPage(navigate: (String) -> Unit) {
                             .border(1.dp, TextFieldBorder, shape = RoundedCornerShape(8.dp))
                             .padding(horizontal = 12.dp),
                         textStyle = TextStyle(fontSize = 20.sp, color = DarkText),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None
+                        else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         decorationBox = { innerTextField ->
                             Box(
@@ -123,7 +145,7 @@ fun LoginPage(navigate: (String) -> Unit) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                //login button
+                // Login button
                 Button(
                     onClick = { navigate("home") },
                     modifier = Modifier
@@ -137,7 +159,7 @@ fun LoginPage(navigate: (String) -> Unit) {
                     Text("Sign In", style = MaterialTheme.typography.h6)
                 }
 
-                //sign up
+                // Sign up link
                 Spacer(modifier = Modifier.height(0.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                     Text("Don't have an account yet? ", color = DarkText)
@@ -153,7 +175,7 @@ fun LoginPage(navigate: (String) -> Unit) {
 }
 
 @Composable
-fun LoginCheckbox(){
+fun LoginCheckbox() {
     var checked by remember { mutableStateOf(true) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -175,7 +197,7 @@ fun LoginCheckbox(){
             "Forgot Password?",
             color = AccentBlue,
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.clickable { /* handle forgot password click, doesnt do anything yet */ }
+            modifier = Modifier.clickable { /* handle forgot password click */ }
         )
     }
 }
