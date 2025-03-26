@@ -22,6 +22,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+// Dark mode colors
+private val DarkBackground = Color(0xFF121212)
+private val DarkSurface = Color(0xFF1E1E1E)
+private val DarkText = Color(0xFFFFFFFF)
+private val DarkSecondaryText = Color(0xFFB0B0B0)
+private val DarkMessageBubbleOther = Color(0xFF424242)
+private val DarkMessageBubbleUser = Color(0xFF2962FF)
+private val DarkInputBackground = Color(0xFF2D2D2D)
+private val SendButtonColor = Color(0xFF2962FF)
+
 @Composable
 fun MessagesScreen(navigate: (String) -> Unit) {
     var selectedConversation by remember { mutableStateOf<String?>(null) }
@@ -56,23 +66,27 @@ fun MessagesListScreen(onChatSelected: (String) -> Unit, navigate: (String) -> U
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Messages", style = MaterialTheme.typography.h6) },
+                title = { Text("Messages", style = MaterialTheme.typography.h6.copy(color = DarkText)) },
                 navigationIcon = {
                     IconButton(onClick = { navigate("home") }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back", tint = DarkText)
                     }
                 },
                 actions = {
                     IconButton(onClick = { /* search functionality */ }) {
-                        Icon(Icons.Filled.Search, contentDescription = "Search")
+                        Icon(Icons.Filled.Search, contentDescription = "Search", tint = DarkText)
                     }
-                }
+                },
+                backgroundColor = DarkSurface,
+                contentColor = DarkText
             )
-        }
+        },
+        backgroundColor = DarkBackground
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(DarkBackground)
                 .padding(innerPadding)
         ) {
             items(sampleConversations.keys.toList()) { name ->
@@ -107,6 +121,7 @@ fun MessageItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onClick() }
+                .background(DarkSurface)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -115,49 +130,49 @@ fun MessageItem(
                 imageVector = Icons.Filled.AccountCircle,
                 contentDescription = "Profile Picture",
                 modifier = Modifier.size(40.dp),
-                tint = Color.Gray
+                tint = DarkSecondaryText
             )
 
             Spacer(modifier = Modifier.width(12.dp))
 
-
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = name, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                Text(text = lastMessage, fontSize = 14.sp, color = Color.Gray)
+                Text(text = name, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = DarkText)
+                Text(text = lastMessage, fontSize = 14.sp, color = DarkSecondaryText)
             }
 
             // 3 dots menu
             Box {
                 IconButton(onClick = { showMenu = true }) {
-                    Icon(Icons.Filled.MoreVert, contentDescription = "Options")
+                    Icon(Icons.Filled.MoreVert, contentDescription = "Options", tint = DarkText)
                 }
 
                 DropdownMenu(
                     expanded = showMenu,
-                    onDismissRequest = { showMenu = false }
+                    onDismissRequest = { showMenu = false },
+                    modifier = Modifier.background(DarkSurface)
                 ) {
                     DropdownMenuItem(onClick = {
                         onHide() //hide the conversation
                         showMenu = false
                     }) {
-                        Text("Hide")
+                        Text("Hide", color = DarkText)
                     }
                     DropdownMenuItem(onClick = {
                         onDelete() //delete the conversation
                         showMenu = false
                     }) {
-                        Text("Delete")
+                        Text("Delete", color = DarkText)
                     }
                     DropdownMenuItem(onClick = {
                         onLeave() // leave the conversation
                         showMenu = false
                     }) {
-                        Text("Leave Conversation")
+                        Text("Leave Conversation", color = DarkText)
                     }
                 }
             }
         }
-        Divider(color = Color.LightGray, thickness = 1.dp)
+        Divider(color = Color.DarkGray, thickness = 1.dp)
     }
 }
 
@@ -172,18 +187,22 @@ fun ChatScreen(chatName: String, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(chatName) },
+                title = { Text(chatName, color = DarkText) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back to Messages")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back to Messages", tint = DarkText)
                     }
-                }
+                },
+                backgroundColor = DarkSurface,
+                contentColor = DarkText
             )
-        }
+        },
+        backgroundColor = DarkBackground
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(DarkBackground)
                 .padding(innerPadding)
         ) {
             // displays messages with most recent message at the bottom of the screen
@@ -195,7 +214,6 @@ fun ChatScreen(chatName: String, onBack: () -> Unit) {
                 reverseLayout = false
             ) {
                 items(messages) { message ->
-
                     ChatBubble(
                         text = message,
                         isUserMessage = message.startsWith("USER:") // checks if message is a user message
@@ -207,21 +225,25 @@ fun ChatScreen(chatName: String, onBack: () -> Unit) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.LightGray) // grey background
+                    .background(DarkInputBackground)
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
                     value = newMessage,
                     onValueChange = { newMessage = it },
-                    label = { Text("Type a message") },
+                    label = { Text("Type a message", color = DarkSecondaryText) },
                     modifier = Modifier
                         .weight(1f)
-                        .background(Color.White, RoundedCornerShape(24.dp)),
+                        .background(DarkSurface, RoundedCornerShape(24.dp)),
                     colors = TextFieldDefaults.textFieldColors(
+                        textColor = DarkText,
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = DarkText,
+                        focusedLabelColor = DarkSecondaryText,
+                        unfocusedLabelColor = DarkSecondaryText
                     )
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -234,10 +256,10 @@ fun ChatScreen(chatName: String, onBack: () -> Unit) {
                         }
                     },
                     modifier = Modifier
-                        .background(Color.White, RoundedCornerShape(50))
+                        .background(SendButtonColor, RoundedCornerShape(50)) // Changed to SendButtonColor
                         .padding(8.dp)
                 ) {
-                    Icon(Icons.Filled.Send, contentDescription = "Send Message", tint = Color.Black)
+                    Icon(Icons.Filled.Send, contentDescription = "Send Message", tint = DarkText)
                 }
             }
         }
@@ -250,21 +272,29 @@ fun ChatBubble(text: String, isUserMessage: Boolean) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
-            .background(
-                if (isUserMessage) Color(0xFF2196F3) // blue background for user messages
-                else Color(0xFFE0E0E0), // grey background for other messages
-                RoundedCornerShape(8.dp)
+            .wrapContentWidth(
+                align = if (isUserMessage) Alignment.End else Alignment.Start
             )
-            .padding(8.dp),
-        contentAlignment = if (isUserMessage) Alignment.CenterEnd else Alignment.CenterStart
+            .widthIn(max = 300.dp)
     ) {
-        Text(
-            text = if (isUserMessage) text.removePrefix("USER:") else text,
-            style = MaterialTheme.typography.body1,
-            color = if (isUserMessage) Color.White else Color.Black
-        )
+        Box(
+            modifier = Modifier
+                .background(
+                    if (isUserMessage) DarkMessageBubbleUser
+                    else DarkMessageBubbleOther,
+                    RoundedCornerShape(8.dp)
+                )
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            Text(
+                text = if (isUserMessage) text.removePrefix("USER:") else text,
+                style = MaterialTheme.typography.body1,
+                color = DarkText
+            )
+        }
     }
 }
+
 // Preview
 @Preview
 @Composable
