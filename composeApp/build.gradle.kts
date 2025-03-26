@@ -90,6 +90,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.10.0")
     implementation("androidx.navigation:navigation-compose:2.9.0-alpha05")
     implementation(libs.androidx.ui.android)
+    implementation(libs.androidx.foundation.android)
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
     implementation("androidx.core:core-ktx:1.10.0")

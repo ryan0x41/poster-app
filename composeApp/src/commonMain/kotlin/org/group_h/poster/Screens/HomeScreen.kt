@@ -26,7 +26,7 @@ fun HomeScreen(navigateToProfile: () -> Unit = {}) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Handle new post */ },
+                onClick = { /* handles new post */ },
                 backgroundColor = MaterialTheme.colors.primary
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Post")
@@ -57,7 +57,7 @@ fun PostItem(post: Post) {
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // User header
+            //user header for each post
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -82,7 +82,7 @@ fun PostItem(post: Post) {
                 }
             }
 
-            // Post content
+            //post content
             Text(
                 text = post.title,
                 style = MaterialTheme.typography.h6,
@@ -94,7 +94,7 @@ fun PostItem(post: Post) {
                 style = MaterialTheme.typography.body1
             )
 
-            // Media placeholders
+            //media placeholders
             if (post.hasImage) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Box(
@@ -121,39 +121,39 @@ fun PostItem(post: Post) {
                 }
             }
 
-            // Action buttons - Now with better spacing and icon options
+            //buttons spaced out
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                // Like button
+                //like button
                 ActionButton(
                     icon = Icons.Outlined.ThumbUp,
                     contentDescription = "Like",
-                    onClick = { /* Like action */ }
+                    onClick = { /* list action */ }
                 )
 
-                // Comment button alternatives (choose one)
+                //comment button
                 ActionButton(
-                    icon = Icons.Outlined.Send, // Best comment icon
+                    icon = Icons.Outlined.Send,
                     contentDescription = "Comment",
-                    onClick = { /* Comment action */ }
+                    onClick = { /* comment action */ }
                 )
 
-                // Share button
+                //share button
                 ActionButton(
                     icon = Icons.Outlined.Share,
                     contentDescription = "Share",
-                    onClick = { /* Share action */ }
+                    onClick = { /* share action */ }
                 )
             }
         }
     }
 }
 
-// Reusable action button component
+//reusable button action component
 @Composable
 fun ActionButton(
     icon: ImageVector,
@@ -164,7 +164,7 @@ fun ActionButton(
         onClick = onClick,
         modifier = Modifier.padding(horizontal = 4.dp),
         colors = ButtonDefaults.textButtonColors(
-            contentColor = Color.Gray // Set all content (icon+text) to gray
+            contentColor = Color.Gray //sets all icons and text to grey
         )
     ) {
         Row(
@@ -174,7 +174,7 @@ fun ActionButton(
                 imageVector = icon,
                 contentDescription = contentDescription,
                 modifier = Modifier.size(20.dp),
-                tint = Color.Gray // Explicit gray for icon
+                tint = Color.Gray //grey for icon
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
@@ -185,7 +185,7 @@ fun ActionButton(
                     else -> ""
                 },
                 fontSize = 12.sp,
-                color = Color.Gray // Explicit gray for text
+                color = Color.Gray //grey for text
             )
         }
     }
@@ -193,7 +193,8 @@ fun ActionButton(
 
 
 
-// Keep your existing samplePosts list
+//sample posts for home screen
+//will implement live posts soon
 val samplePosts = listOf(
     Post(
         title = "Beautiful day at the beach!",
