@@ -24,8 +24,11 @@ data class Post(
     post
  */
 data class User(
+    //probably using this so it connects with the user id from the api
+   // val id: String,
     val username: String,//username
     val joinDate: String,//user join date
+    //might have to get rid of isCurrentUser when isOwner is fully implemented
     val isCurrentUser: Boolean,//if the user is logged in
     val posts: List<Post>//all the users posts (if they have any)
 )

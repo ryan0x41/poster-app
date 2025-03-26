@@ -18,8 +18,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+/*
+    when calling ProfileScreen from other screens:
+    for your own profile:
+    ProfileScreen(user = currentUser, isOwner = true)
+
+    for someone elses profile:
+    ProfileScreen(user = otherUser, isOwner = false)
+ */
+
+
 @Composable
-fun ProfileScreen(user: User = sampleUser) {
+fun ProfileScreen(user: User = sampleUser, isOwner: Boolean = true) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,7 +59,7 @@ fun ProfileScreen(user: User = sampleUser) {
                     fontSize = 14.sp,
                     color = Color.LightGray // light grey for secondary text
                 )
-                if (user.isCurrentUser) {
+                if (isOwner) {//only pops up if youre on your own profile page
                     TextButton(onClick = { /* edit profile */ }) {
                         Text(
                             "edit profile?",
