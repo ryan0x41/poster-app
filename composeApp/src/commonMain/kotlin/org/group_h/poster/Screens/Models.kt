@@ -12,10 +12,10 @@ package org.group_h.poster.Screens
     in their post
 */
 data class Post(
-    val title: String,
-    val content: String,
-    val hasImage: Boolean = false,
-    val hasSong: Boolean = false
+    val title: String,//post heading
+    val content: String,//post content
+    val hasImage: Boolean = false,//if post has an image
+    val hasSong: Boolean = false//if post has a song
 )
 /*
     same with Post, it just defines what should
@@ -24,8 +24,8 @@ data class Post(
     post
  */
 data class User(
-    val username: String,
-    val joinDate: String,
-    val isCurrentUser: Boolean,
-    val posts: List<Post>
+    val username: String,//username
+    val joinDate: String,//user join date
+    val isCurrentUser: Boolean,//if the user is logged in
+    val posts: List<Post>//all the users posts (if they have any)
 )
