@@ -23,6 +23,34 @@ fun App() {
     }
 }
 
+/*  might need to use this when implementing api
+    or something similar
+*/
+//NavHost(navController, startDestination = "home") {
+//
+//    composable(
+//        "profile/{userId}",
+//        arguments = listOf(navArgument("userId") { type = NavType.StringType })
+//    ) { backStackEntry ->
+//        val userId = backStackEntry.arguments?.getString("userId") ?: ""
+//        val currentUserId = "current_user_id_here"
+//
+//        //if its the current users profile
+//        val isOwner = userId == currentUserId
+//
+//        //get user data
+//        val user = viewModel.getUserById(userId)
+//
+//        ProfileScreen(
+//            user = user,
+//            isOwner = isOwner,
+//            onEditProfile = { navController.navigate("editProfile") }
+//        )
+//    }
+//}
+
+
+
 @Preview
 @Composable
 fun AppPreview() {

@@ -10,19 +10,30 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun TopBar(onTabSelected: (String) -> Unit) {
     TopAppBar(
-        title = { Text("poster", style = MaterialTheme.typography.h6) },
-        backgroundColor = Color.White,
-        contentColor = Color.Black,
+        title = {
+            Text(
+                "poster",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+        },
+        backgroundColor = Color.Black, // Black background
+        contentColor = Color.White,    // White icons/text
         actions = {
             IconButton(onClick = { onTabSelected("search") }) {
-                Icon(Icons.Filled.Search, contentDescription = "Search")
+                Icon(
+                    Icons.Filled.Search,
+                    contentDescription = "Search",
+                    tint = Color.White
+                )
             }
             IconButton(onClick = { onTabSelected("messages") }) {
-                Icon(Icons.Filled.Send, contentDescription = "Messages")
+                Icon(
+                    Icons.Filled.Send,
+                    contentDescription = "Messages",
+                    tint = Color.White
+                )
             }
         }
     )
 }
-
-
-
