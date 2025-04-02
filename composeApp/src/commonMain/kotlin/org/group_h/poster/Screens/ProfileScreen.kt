@@ -9,6 +9,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,6 +21,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ryan.poster_app_api_wrapper.AuthenticatedUser
+import com.ryan.poster_app_api_wrapper.ApiClientSingleton
+import com.ryan.poster_app_api_wrapper.FullPost
+import com.ryan.poster_app_api_wrapper.FullUserProfileResponse
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /*
@@ -27,84 +36,89 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
     ProfileScreen(user = otherUser, isOwner = false)
  */
 
-
 @Composable
-fun ProfileScreen(user: User = sampleUser, isOwner: Boolean = true) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black) // black background
-            .padding(horizontal = 16.dp)
-    ) {
-        //user info section
-        Row(
+fun ProfileScreen(user: FullUserProfileResponse?, isOwner: Boolean = true) {
+    if (user == null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("Loading...", color = Color.White)
+        }
+    } else {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .background(Color.Black) // black background
+                .padding(horizontal = 16.dp)
         ) {
-            //user details
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+            //user info section
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = user.username,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White //white text
-                )
-                Text(
-                    text = user.joinDate,
-                    fontSize = 14.sp,
-                    color = Color.LightGray // light grey for secondary text
-                )
-                if (isOwner) {//only pops up if youre on your own profile page
-                    TextButton(onClick = { /* edit profile */ }) {
-                        Text(
-                            "edit profile?",
-                            color = Color(0xFF1DA1F2) // edit profile blue
-                        )
+                //user details
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = user.user.username,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White //white text
+                    )
+                    Text(
+                        text = user.user.accountCreation.toString(),
+                        fontSize = 14.sp,
+                        color = Color.LightGray // light grey for secondary text
+                    )
+                    if (isOwner) {//only pops up if youre on your own profile page
+                        TextButton(onClick = { /* edit profile */ }) {
+                            Text(
+                                "edit profile?",
+                                color = Color(0xFF1DA1F2) // edit profile blue
+                            )
+                        }
                     }
                 }
-            }
 
-            //profile image placeholder
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFF333333)), //dark grey circle for profile image
-                contentAlignment = Alignment.Center
+                //profile image placeholder
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF333333)), //dark grey circle for profile image
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = "Profile Image",
+                        tint = Color.LightGray, // light grey icon
+                        modifier = Modifier.size(60.dp)
+                    )
+                }
+            }
+            Divider(color = Color(0xFF333333), thickness = 1.dp) //dark grey divider
+
+            //list of posts
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Profile Image",
-                    tint = Color.LightGray, // light grey icon
-                    modifier = Modifier.size(60.dp)
-                )
-            }
-        }
-        Divider(color = Color(0xFF333333), thickness = 1.dp) //dark grey divider
-
-        //list of posts
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(user.posts) { post ->
-                ProfilePostItem(post)
-                Divider(
-                    color = Color(0xFF333333),
-                    thickness = 1.dp,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
+                items(user.user.posts) { post ->
+                    ProfilePostItem(post)
+                    Divider(
+                        color = Color(0xFF333333),
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun ProfilePostItem(post: Post) {
+fun ProfilePostItem(post: FullPost) {
     Card(
         elevation = 4.dp,
         backgroundColor = Color(0xFF212121), //dark grey card
@@ -131,7 +145,7 @@ fun ProfilePostItem(post: Post) {
             )
 
             //media placeholders
-            if (post.hasImage) {
+            if (post.images.size > 0) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -146,55 +160,49 @@ fun ProfilePostItem(post: Post) {
                 }
             }
 
-            if (post.hasSong) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .background(Color(0xFF424242)), //darker grey
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        "🎵 Song Recommendation",
-                        color = Color.White //white text
-                    )
-                }
-            }
+//            if (post.hasSong) {
+//                Spacer(modifier = Modifier.height(8.dp))
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(60.dp)
+//                        .background(Color(0xFF424242)), //darker grey
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text(
+//                        "🎵 Song Recommendation",
+//                        color = Color.White //white text
+//                    )
+//                }
+//            }
         }
     }
 }
 
-//sample user posts
-val sampleUser = User(
-    username = "TravelEnthusiast",
-    joinDate = "Joined March 2023",
-    isCurrentUser = true,
-    posts = listOf(
-        Post(
-            title = "Night view from the mountains",
-            content = "The city lights look absolutely breathtaking from up here",
-            hasImage = true
-        ),
-        Post(
-            title = "New favorite album",
-            content = "This jazz record has been on repeat all week",
-            hasSong = true
-        ),
-        Post(
-            title = "Homemade dinner",
-            content = "Experimented with a new recipe tonight - turned out amazing!",
-            hasImage = true
-        )
-    )
-)
+private val DarkBackground = Color(0xFF121212)
+private val DarkSurface = Color(0xFF1E1E1E)
+private val DarkText = Color(0xFFFFFFFF)
+private val DarkSecondaryText = Color(0xFFB0B0B0)
+private val AccentBlue = Color(0xFF2962FF)
+private val TextFieldBorder = Color(0xFF424242)
 
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    MaterialTheme(
-        colors = darkColors()
-    ) {
-        ProfileScreen()
+    MaterialTheme(colors = darkColors()) {
+        var user by remember { mutableStateOf<FullUserProfileResponse?>(null) }
+        // load user async
+        LaunchedEffect(Unit) {
+            val authenticatedUser: AuthenticatedUser? = ApiClientSingleton.getAuthenticatedUser()
+            user = authenticatedUser?.id?.let { ApiClientSingleton.getUserProfileById(it) }
+        }
+        if (user != null) {
+            ProfileScreen(user = user, isOwner = true)
+        } else {
+            // show loading while user being fetched
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Loading...", color = DarkText)
+            }
+        }
     }
 }

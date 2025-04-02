@@ -20,7 +20,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import com.ryan.poster_app_api_wrapper.ApiClient
+import com.ryan.poster_app_api_wrapper.ApiClientSingleton
 import kotlinx.coroutines.launch
 
 private val DarkBackground = Color(0xFF121212)
@@ -41,7 +41,8 @@ fun RegisterView(navigate: (String) -> Unit) {
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var successMessage by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
-    val apiClient = remember { ApiClient() }
+
+    val apiClient = ApiClientSingleton
 
     MaterialTheme(
         colors = darkColors(

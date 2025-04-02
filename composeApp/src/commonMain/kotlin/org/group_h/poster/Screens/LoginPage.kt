@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import com.ryan.poster_app_api_wrapper.ApiClient
 import kotlinx.coroutines.launch
+import com.ryan.poster_app_api_wrapper.ApiClientSingleton
 
 private val DarkBackground = Color(0xFF121212)
 private val DarkSurface = Color(0xFF1E1E1E)
@@ -39,7 +40,8 @@ fun LoginPage(navigate: (String) -> Unit) {
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
-    val apiClient = remember { ApiClient() }
+
+    val apiClient = ApiClientSingleton
 
     MaterialTheme(
         colors = darkColors(

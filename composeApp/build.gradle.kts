@@ -50,6 +50,7 @@ kotlin {
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime.compose)
                 implementation(project(":poster-app-api-wrapper:shared"))
+                implementation("io.coil-kt.coil3:coil-compose:3.0.0-alpha01")
             }
         }
     }

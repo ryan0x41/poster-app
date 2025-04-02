@@ -1,18 +1,10 @@
 package org.group_h.poster.Screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import com.ryan.poster_app_api_wrapper.ApiClientSingleton
+import com.ryan.poster_app_api_wrapper.FullUserProfileResponse
 import org.group_h.poster.ui.components.BottomNavigationBar
 import org.group_h.poster.ui.components.TopBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -20,6 +12,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun HomeView(navigate: (String) -> Unit) {
     var selectedBotTab by remember { mutableStateOf("home") }
+    val apiClient = ApiClientSingleton
+    var user by remember { mutableStateOf<FullUserProfileResponse?>(null) }
+
+    LaunchedEffect(Unit) {
+        val authenticatedUser = apiClient.getAuthenticatedUser()
+        user = authenticatedUser?.id?.let { apiClient.getUserProfileById(it) }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         // Top Bar that triggers navigation when messages or search is pressed
@@ -36,7 +35,10 @@ fun HomeView(navigate: (String) -> Unit) {
                 "home" -> HomeScreen()
                 "notifications" -> NotificationScreen()
                 "post" -> PostScreen()
-                "profile" -> ProfileScreen()
+                "profile" -> ProfileScreen(
+                    isOwner = true,
+                    user = user
+                )
             }
         }
 
