@@ -32,7 +32,7 @@ fun HomeView(navigate: (String) -> Unit) {
         // Content area controlled by bottom navigation selection
         Box(modifier = Modifier.weight(1f)) {
             when (selectedBotTab) {
-                "home" -> HomeScreen()
+                "home" -> HomeFeedView()
                 "notifications" -> NotificationScreen()
                 "post" -> PostScreen()
                 "profile" -> ProfileScreen(
