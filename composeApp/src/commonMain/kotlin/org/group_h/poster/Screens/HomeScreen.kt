@@ -127,13 +127,8 @@ fun ActionButton(
 
 @Composable
 fun PostItem(post: HomeFeedPost) {
-    // val profileUrl = post.userProfile.profileImageUrl
-    val profileUrl = "https://topdriver.com/wp-content/uploads/2018/01/cropped-favicon-32x32.png"
-    AsyncImage(
-        modifier = Modifier.size(300.dp).padding(16.dp),
-        model = "https://fastly.picsum.photos/id/5/5000/3334.jpg?hmac=R_jZuyT1jbcfBlpKFxAb0Q3lof9oJ0kREaxsYV3MgCc",
-        contentDescription = null
-    )
+    val profileUrl = post.userProfile.profileImageUrl
+
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = 4.dp,

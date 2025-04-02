@@ -27,6 +27,7 @@ fun App() {
         setSingletonImageLoaderFactory { context ->
             getAsyncImageLoader(context)
         }
+
         when (currentScreen) {
             "login" -> LoginPage(navigate = { screen -> currentScreen = screen })
             "home" -> HomeView(navigate = { screen -> currentScreen = screen })

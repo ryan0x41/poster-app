@@ -1,28 +1,30 @@
 [versions]
-agp = "8.8.0"
+agp = "8.2.0"                                 # from first (was 8.8.0 in second)
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-androidx-activityCompose = "1.9.3"
-androidx-appcompat = "1.7.0"
-androidx-constraintlayout = "2.2.0"
-androidx-core-ktx = "1.15.0"
-androidx-espresso-core = "3.6.1"
-androidx-lifecycle = "2.8.4"
+androidx-activityCompose = "1.9.0"              # from first (was 1.9.3 in second)
+androidx-appcompat = "1.6.1"                    # from first (was 1.7.0 in second)
+androidx-constraintlayout = "2.1.4"             # from first (was 2.2.0 in second)
+androidx-core-ktx = "1.13.1"                    # from first (was 1.15.0 in second)
+androidx-espresso-core = "3.5.1"                # from first (was 3.6.1 in second)
+androidx-lifecycle = "2.8.4"                    # only in second
 androidx-material = "1.12.0"
-androidx-test-junit = "1.2.1"
-coilCompose = "2.2.2"
-compose-multiplatform = "1.7.0"
+androidx-test-junit = "1.1.5"                   # from first (was 1.2.1 in second)
+coilCompose = "2.2.2"                         # only in second
+compose-plugin = "1.6.10"                       # only in first
+compose-multiplatform = "1.7.0"                 # only in second
 junit = "4.13.2"
-kotlin = "2.1.0"
-navigationCompose = "2.8.6"
-activityKtx = "1.10.0"
-navigationRuntimeAndroid = "2.9.0-alpha05"
-uiToolingPreviewAndroid = "1.7.7"
-uiAndroid = "1.7.8"
-foundationAndroid = "1.7.8"
-ktor = "3.0.0-wasm2"
-coil3 = "3.0.0-alpha06"
+kotlin = "2.1.0"                              # from first (was 2.1.0 in second)
+navigationCompose = "2.8.6"                     # only in second
+activityKtx = "1.10.0"                          # only in second
+navigationRuntimeAndroid = "2.9.0-alpha05"      # only in second
+uiToolingPreviewAndroid = "1.7.7"               # only in second
+uiAndroid = "1.7.8"                           # only in second
+foundationAndroid = "1.7.8"                     # only in second
+ktor = "3.0.1"
+coil = "3.0.4"
+kotlinx-coroutines = "1.9.0"
 
 
 [libraries]
@@ -36,28 +38,26 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
-androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
-androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
-androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
-androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
-androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }         # from second
+androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }  # from second
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }                     # from second
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }                                     # from second
+androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }  # from second
+androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }  # from second
+androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }                                           # from second
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }             # from second
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
-ktor-client-curl = { module = "io.ktor:ktor-client-curl", version.ref = "ktor" }
-ktor-client-winhttp = { module = "io.ktor:ktor-client-winhttp", version.ref = "ktor" }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
-coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
-coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
+ktor-client-java = { group = "io.ktor", name = "ktor-client-java", version.ref = "ktor" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }   # from second
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }                  # from first
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

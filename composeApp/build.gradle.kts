@@ -37,7 +37,7 @@ kotlin {
             dependencies {
                 implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
-                implementation(libs.ktor.client.okhttp)
+                implementation(libs.ktor.client.android)
             }
         }
         commonMain {
@@ -49,16 +49,17 @@ kotlin {
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.ktor.core)
-                implementation(libs.coil.compose.core)
-                implementation(libs.coil.mp)
-                implementation(libs.coil.network.ktor)
                 implementation(libs.coil.compose)
+                implementation(libs.coil.network.ktor)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime.compose)
                 implementation(project(":poster-app-api-wrapper:shared"))
             }
         }
         iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        appleMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
     }
