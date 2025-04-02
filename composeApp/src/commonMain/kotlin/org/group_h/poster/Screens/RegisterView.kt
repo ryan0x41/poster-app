@@ -13,13 +13,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import com.ryan.poster_app_api_wrapper.ApiClient
+import kotlinx.coroutines.launch
 
-//Dark mode colour schemd
 private val DarkBackground = Color(0xFF121212)
 private val DarkSurface = Color(0xFF1E1E1E)
 private val DarkText = Color(0xFFFFFFFF)
@@ -29,9 +32,16 @@ private val TextFieldBorder = Color(0xFF424242)
 
 @Composable
 fun RegisterView(navigate: (String) -> Unit) {
+    val spacing = 16.dp
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var successMessage by remember { mutableStateOf<String?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+    val apiClient = remember { ApiClient() }
 
     MaterialTheme(
         colors = darkColors(
@@ -46,30 +56,33 @@ fun RegisterView(navigate: (String) -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DarkBackground),
+                .background(DarkBackground)
+                .padding(spacing),
             contentAlignment = Alignment.Center
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.85f)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxWidth(0.85f),
+                horizontalAlignment = Alignment.Start
             ) {
-                //title
                 Text(
-                    "poster",
-                    style = MaterialTheme.typography.h4.copy(color = DarkText),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    "poster-social",
+                    style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold),
+                    color = DarkText,
+                    modifier = Modifier.offset(y = (-20).dp)
                 )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    //username field
-                    Text("Username", style = MaterialTheme.typography.h6.copy(color = DarkText))
+                Text(
+                    "register",
+                    style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Light),
+                    color = DarkSecondaryText,
+                    modifier = Modifier.offset(y = (-8).dp)
+                )
+                Spacer(modifier = Modifier.height(spacing))
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        "Username",
+                        style = MaterialTheme.typography.h6.copy(color = DarkText, fontSize = 14.sp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                     BasicTextField(
                         value = username,
                         onValueChange = { username = it },
@@ -77,8 +90,8 @@ fun RegisterView(navigate: (String) -> Unit) {
                             .fillMaxWidth()
                             .height(45.dp)
                             .border(1.dp, TextFieldBorder, shape = RoundedCornerShape(8.dp))
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
-                        textStyle = TextStyle(fontSize = 18.sp, color = DarkText),
+                            .padding(horizontal = spacing),
+                        textStyle = TextStyle(fontSize = 20.sp, color = DarkText),
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
                         decorationBox = { innerTextField ->
                             Box(
@@ -86,17 +99,20 @@ fun RegisterView(navigate: (String) -> Unit) {
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 if (username.isEmpty()) {
-                                    Text(text = " exampleUsername123", color = DarkSecondaryText)
+                                    Text(text = "exampleUsername", color = DarkSecondaryText)
                                 }
                                 innerTextField()
                             }
                         }
                     )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    //email field
-                    Text("Email", style = MaterialTheme.typography.h6.copy(color = DarkText))
+                }
+                Spacer(modifier = Modifier.height(spacing))
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        "Email",
+                        style = MaterialTheme.typography.h6.copy(color = DarkText, fontSize = 14.sp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                     BasicTextField(
                         value = email,
                         onValueChange = { email = it },
@@ -104,29 +120,44 @@ fun RegisterView(navigate: (String) -> Unit) {
                             .fillMaxWidth()
                             .height(45.dp)
                             .border(1.dp, TextFieldBorder, shape = RoundedCornerShape(8.dp))
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
-                        textStyle = TextStyle(fontSize = 18.sp, color = DarkText),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
+                            .padding(horizontal = spacing),
+                        textStyle = TextStyle(fontSize = 20.sp, color = DarkText),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
                         decorationBox = { innerTextField ->
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 if (email.isEmpty()) {
-                                    Text(text = " you@example.com", color = DarkSecondaryText)
+                                    Text(text = "example@mail.com", color = DarkSecondaryText)
                                 }
                                 innerTextField()
                             }
                         }
                     )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    //password field
-                    Text("Password", style = MaterialTheme.typography.h6.copy(color = DarkText))
+                }
+                Spacer(modifier = Modifier.height(spacing))
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "Password",
+                            style = MaterialTheme.typography.h6.copy(color = DarkText, fontSize = 14.sp)
+                        )
+                        TextButton(
+                            onClick = { passwordVisible = !passwordVisible },
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Text(
+                                text = if (passwordVisible) "HIDE" else "SHOW",
+                                color = AccentBlue,
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
                     BasicTextField(
                         value = password,
                         onValueChange = { password = it },
@@ -134,51 +165,87 @@ fun RegisterView(navigate: (String) -> Unit) {
                             .fillMaxWidth()
                             .height(45.dp)
                             .border(1.dp, TextFieldBorder, shape = RoundedCornerShape(8.dp))
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
-                        textStyle = TextStyle(fontSize = 18.sp, color = DarkText),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done
-                        ),
+                            .padding(horizontal = spacing),
+                        textStyle = TextStyle(fontSize = 20.sp, color = DarkText),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         decorationBox = { innerTextField ->
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 if (password.isEmpty()) {
-                                    Text(text = " ●●●●●●●●●●", color = DarkSecondaryText)
+                                    Text(text = "●●●●●●●●●●●", color = DarkSecondaryText)
                                 }
                                 innerTextField()
                             }
                         }
                     )
                 }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                //sign up button
+                Spacer(modifier = Modifier.height(spacing))
                 Button(
-                    onClick = { navigate("home") },
+                    onClick = {
+                        coroutineScope.launch {
+                            isLoading = true
+                            try {
+                                apiClient.register(username.trim(), email.trim(), password)
+                                successMessage = "Registration successful. Please log in."
+                            } catch (e: Exception) {
+                                errorMessage = "Registration failed: ${e.message}"
+                            } finally {
+                                isLoading = false
+                            }
+                        }
+                    },
                     modifier = Modifier
-                        .fillMaxWidth(0.75f)
-                        .height(55.dp)
-                        .padding(vertical = 8.dp)
-                        .align(Alignment.CenterHorizontally),
+                        .fillMaxWidth()
+                        .padding(vertical = spacing),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = AccentBlue,
                         contentColor = DarkText
                     )
                 ) {
-                    Text("Sign Up", fontSize = 18.sp)
+                    Text("Register", style = MaterialTheme.typography.h6)
                 }
-
-                //already have account link
-                Spacer(modifier = Modifier.height(16.dp))
+                successMessage?.let { message ->
+                    AlertDialog(
+                        onDismissRequest = { /* prevents dismiss outside touch */ },
+                        title = { Text("Success") },
+                        text = { Text(message) },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    successMessage = null
+                                    navigate("login")
+                                },
+                                colors = ButtonDefaults.buttonColors(backgroundColor = AccentBlue)
+                            ) {
+                                Text("OK", color = DarkText)
+                            }
+                        }
+                    )
+                }
+                errorMessage?.let { message ->
+                    AlertDialog(
+                        onDismissRequest = { errorMessage = null },
+                        title = { Text("Error") },
+                        text = { Text(message) },
+                        confirmButton = {
+                            Button(
+                                onClick = { errorMessage = null },
+                                colors = ButtonDefaults.buttonColors(backgroundColor = AccentBlue)
+                            ) {
+                                Text("OK", color = DarkText)
+                            }
+                        }
+                    )
+                }
+                Spacer(modifier = Modifier.height(spacing))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Already have an account? ", color = DarkText)
+                    Text("Already have an account?", color = DarkText)
                     Text(
                         text = "Sign In",
                         color = AccentBlue,
@@ -192,6 +259,6 @@ fun RegisterView(navigate: (String) -> Unit) {
 
 @Preview
 @Composable
-fun RegisterPagePreview() {
+fun RegisterViewPreview() {
     RegisterView(navigate = {})
 }

@@ -49,6 +49,7 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(project(":poster-app-api-wrapper:shared"))
             }
         }
     }
@@ -92,6 +93,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.0-alpha05")
     implementation(libs.androidx.ui.android)
     implementation(libs.androidx.foundation.android)
+    implementation(project(":poster-app-api-wrapper:shared"))
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
     implementation("androidx.core:core-ktx:1.10.0")
