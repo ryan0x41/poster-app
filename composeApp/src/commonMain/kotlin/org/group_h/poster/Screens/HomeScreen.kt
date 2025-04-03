@@ -1,8 +1,7 @@
 package org.group_h.poster.Screens
 
-// Add Coil3 import
-
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,17 +18,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ThumbUp
@@ -48,29 +44,27 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.ImageLoader
-import coil3.PlatformContext
 import coil3.compose.AsyncImage
-import coil3.disk.DiskCache
-import coil3.memory.MemoryCache
-import coil3.request.CachePolicy
-import coil3.request.crossfade
-import coil3.util.DebugLogger
 import com.ryan.poster_app_api_wrapper.ApiClientSingleton
 import com.ryan.poster_app_api_wrapper.HomeFeed
 import com.ryan.poster_app_api_wrapper.HomeFeedPost
-import okio.FileSystem
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun HomeFeedView(navigate: (String) -> Unit = {}) {
+    // we need to access information from the api, so grab the ONLY instance of apiClient
     val apiClient = ApiClientSingleton
+    // declare homeFeed being HomeFeed, safe call just in case it is null
     var homeFeed by remember { mutableStateOf<HomeFeed?>(null) }
 
+    // to perform async within composable
+    // TO_RESEARCH: runBlocking vs this
     LaunchedEffect(Unit) {
         try {
+            // try grab our home feed
             homeFeed = apiClient.getHomeFeed()
         } catch (e: Exception) {
+            // if fail just create an empty home feed
             homeFeed = HomeFeed(
                 posts = emptyList(),
                 message = "caught error",
@@ -79,32 +73,27 @@ fun HomeFeedView(navigate: (String) -> Unit = {}) {
         }
     }
 
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { /* handles new post */ },
-                backgroundColor = MaterialTheme.colors.primary
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Post", tint = Color.White)
-            }
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(Color.Black)
-        ) {
-            homeFeed?.posts?.let { posts ->
-                items(posts) { post ->
-                    PostItem(post = post)
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+    // posts list
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .padding(16.dp)
+    ) {
+        // posts
+        homeFeed?.posts?.let { posts ->
+            // for each
+            items(posts) { post ->
+                // create a post item
+                PostItem(post = post, navigate = navigate)
+                // with space between
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
 }
 
+// a clickable button with an image
 @Composable
 fun ActionButton(
     icon: ImageVector,
@@ -125,10 +114,13 @@ fun ActionButton(
     }
 }
 
+// each HomeFeedPost from app-api-wrapper can be rendered using this function
 @Composable
-fun PostItem(post: HomeFeedPost) {
+fun PostItem(post: HomeFeedPost, navigate: (String) -> Unit) {
+    // grab the url of the profile image
     val profileUrl = post.userProfile.profileImageUrl
 
+    // ui stuff, wont explain everything, thanks josh
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = 4.dp,
@@ -140,8 +132,10 @@ fun PostItem(post: HomeFeedPost) {
         Column(modifier = Modifier.padding(16.dp)   ) {
             // user header with Coil3 profile image
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier
+                    .clickable { navigate("profile?userId=${post.author}") }
+                    .padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier.size(40.dp),

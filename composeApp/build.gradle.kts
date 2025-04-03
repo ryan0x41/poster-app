@@ -53,6 +53,7 @@ kotlin {
                 implementation(libs.coil.network.ktor)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
                 implementation(project(":poster-app-api-wrapper:shared"))
             }
         }

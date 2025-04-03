@@ -24,7 +24,8 @@ import com.ryan.poster_app_api_wrapper.ApiClient
 import kotlinx.coroutines.launch
 import com.ryan.poster_app_api_wrapper.ApiClientSingleton
 
-private val DarkBackground = Color(0xFF121212)
+// TODO: throw this in a data class
+private val DarkBackground = Color(0xFF000000)
 private val DarkSurface = Color(0xFF1E1E1E)
 private val DarkText = Color(0xFFFFFFFF)
 private val DarkSecondaryText = Color(0xFFB0B0B0)
@@ -33,7 +34,10 @@ private val TextFieldBorder = Color(0xFF424242)
 
 @Composable
 fun LoginPage(navigate: (String) -> Unit) {
+    // define spacing
     val spacing = 16.dp
+
+    // declare username, password, and ui stuffs
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -41,8 +45,10 @@ fun LoginPage(navigate: (String) -> Unit) {
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
 
+    // our one instance of apiClient
     val apiClient = ApiClientSingleton
 
+    // ui stuffs i wont explain
     MaterialTheme(
         colors = darkColors(
             primary = AccentBlue,
@@ -159,11 +165,17 @@ fun LoginPage(navigate: (String) -> Unit) {
                         coroutineScope.launch {
                             isLoading = true
                             try {
+                                // when user clicks sign in, we try login, if ready, we do auth
+                                // which saves our user information within the apiClient instance
+                                // so we can getAuthenticatedUser later
                                 apiClient.login(username.trim(), password)
+                                apiClient.auth()
                                 navigate("home")
                             } catch (e: Exception) {
+                                // set an error message if login failed
                                 errorMessage = "Login failed: ${e.message}"
                             } finally {
+                                // for either result, we are no longer loading
                                 isLoading = false
                             }
                         }
@@ -178,7 +190,9 @@ fun LoginPage(navigate: (String) -> Unit) {
                 ) {
                     Text("Sign In", style = MaterialTheme.typography.h6)
                 }
+                // if we have an error message
                 errorMessage?.let { message ->
+                    // show it in an alert
                     AlertDialog(
                         onDismissRequest = { errorMessage = null },
                         title = { Text("Error") },
@@ -210,6 +224,7 @@ fun LoginPage(navigate: (String) -> Unit) {
     }
 }
 
+// thanks josh
 @Composable
 fun LoginCheckbox() {
     var checked by remember { mutableStateOf(true) }

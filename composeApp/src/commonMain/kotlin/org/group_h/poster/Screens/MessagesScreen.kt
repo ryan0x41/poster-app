@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 // Dark mode colors
-private val DarkBackground = Color(0xFF121212)
+private val DarkBackground = Color(0xFF000000)
 private val DarkSurface = Color(0xFF1E1E1E)
 private val DarkText = Color(0xFFFFFFFF)
 private val DarkSecondaryText = Color(0xFFB0B0B0)
