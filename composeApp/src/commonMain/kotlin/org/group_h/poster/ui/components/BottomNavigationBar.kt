@@ -23,7 +23,9 @@ fun BottomNavigationBar(selectedTab: String, onTabSelected: (String) -> Unit) {
                 )
             },
             selected = selectedTab == "home",
-            onClick = { onTabSelected("home") },
+            onClick = {
+                onTabSelected("home")
+            },
             selectedContentColor = Color.White,
             unselectedContentColor = Color.Gray
         )

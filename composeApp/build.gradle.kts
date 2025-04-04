@@ -55,6 +55,7 @@ kotlin {
                 implementation(libs.androidx.lifecycle.runtime.compose)
                 implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
                 implementation(project(":poster-app-api-wrapper:shared"))
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
             }
         }
         iosMain.dependencies {
@@ -99,7 +100,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.navigation.runtime.android)
     implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.material3:material3:1.1.0")
     implementation("androidx.activity:activity-compose:1.10.0")
     implementation("androidx.navigation:navigation-compose:2.9.0-alpha05")
     implementation(libs.androidx.ui.android)

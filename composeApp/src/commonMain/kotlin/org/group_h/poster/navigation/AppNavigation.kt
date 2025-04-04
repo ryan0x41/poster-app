@@ -46,9 +46,8 @@ fun AppNavigation() {
             if (showBars) {
                 BottomNavigationBar(selectedTab = currentRoute) { tab ->
                     if (tab == "home") {
-                        // When tapping "home", clear the back stack up to "home" so that login/profile etc. are removed.
                         navController.navigate("home") {
-                            popUpTo("home") { inclusive = true }
+                            popUpTo("home") { inclusive = false }
                             launchSingleTop = true
                         }
                     } else {

@@ -1,5 +1,6 @@
 package org.group_h.poster.Screens
 
+import HomeFeedViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,9 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -31,6 +36,7 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,50 +50,76 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.ryan.poster_app_api_wrapper.ApiClientSingleton
 import com.ryan.poster_app_api_wrapper.HomeFeed
 import com.ryan.poster_app_api_wrapper.HomeFeedPost
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun HomeFeedView(navigate: (String) -> Unit = {}) {
-    // we need to access information from the api, so grab the ONLY instance of apiClient
-    val apiClient = ApiClientSingleton
-    // declare homeFeed being HomeFeed, safe call just in case it is null
-    var homeFeed by remember { mutableStateOf<HomeFeed?>(null) }
+fun HomeFeedView(
+    navigate: (String) -> Unit = {},
+    viewModel: HomeFeedViewModel = remember { HomeFeedViewModel() }
+) {
+    val homeFeed by viewModel.homeFeed.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
-    // to perform async within composable
-    // TO_RESEARCH: runBlocking vs this
-    LaunchedEffect(Unit) {
-        try {
-            // try grab our home feed
-            homeFeed = apiClient.getHomeFeed()
-        } catch (e: Exception) {
-            // if fail just create an empty home feed
-            homeFeed = HomeFeed(
-                posts = emptyList(),
-                message = "caught error",
-                page = 1
-            )
-        }
-    }
+    val lazyListState = rememberLazyListState()
 
-    // posts list
-    LazyColumn(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(16.dp)
     ) {
-        // posts
-        homeFeed?.posts?.let { posts ->
-            // for each
-            items(posts) { post ->
-                // create a post item
-                PostItem(post = post, navigate = navigate)
-                // with space between
-                Spacer(modifier = Modifier.height(8.dp))
+        LazyColumn(
+            state = lazyListState,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        onClick = { viewModel.loadHomeFeed(forceRefresh = true) },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Transparent,
+                            contentColor = Color.White
+                        ),
+                        elevation = ButtonDefaults.elevation(
+                            defaultElevation = 0.dp,
+                            pressedElevation = 0.dp
+                        )
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            if (isLoading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = Color.White,
+                                    strokeWidth = 2.dp
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
+                            Text("Refresh Feed")
+                        }
+                    }
+                }
+            }
+
+            homeFeed?.posts?.let { posts ->
+                items(posts) { post ->
+                    PostItem(post = post, navigate = navigate)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
